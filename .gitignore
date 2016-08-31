@@ -61,3 +61,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/Proyecto_Grafos_conjuntos_Listas/nbproject/private/
+/Proyecto_Grafos_conjuntos_Listas/build/
