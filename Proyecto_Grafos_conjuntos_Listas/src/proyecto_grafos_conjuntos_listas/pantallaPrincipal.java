@@ -198,9 +198,8 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         } catch(Exception e) {}
        
         if(allMembers.size()>0){
-            Settings newSettings = new Settings(this,true,allMembers);
-            newSettings.show();
-        }
+            
+                    }
     }//GEN-LAST:event_jmfileActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
