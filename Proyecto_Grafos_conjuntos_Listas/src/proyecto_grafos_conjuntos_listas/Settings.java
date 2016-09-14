@@ -62,6 +62,12 @@ public class Settings extends javax.swing.JDialog {
             }
         });
 
+        jsperson.setEnabled(false);
+
+        jscouple.setEnabled(false);
+
+        jsbreakleader.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -116,7 +122,7 @@ public class Settings extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnaceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaceptarActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnaceptarActionPerformed
 
     /**
