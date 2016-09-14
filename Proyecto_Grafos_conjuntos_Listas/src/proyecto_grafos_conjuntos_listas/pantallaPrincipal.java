@@ -34,13 +34,13 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jbSetting = new javax.swing.JDialog();
-        jsperson = new javax.swing.JSpinner();
+        jsPersonXGroup = new javax.swing.JSpinner();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jscouple = new javax.swing.JSpinner();
         jLabel3 = new javax.swing.JLabel();
-        jsbreakleader = new javax.swing.JSpinner();
+        jsBreakXLeader = new javax.swing.JSpinner();
         btnaceptar = new javax.swing.JButton();
+        chkOneCouple = new javax.swing.JCheckBox();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jmfile = new javax.swing.JMenuItem();
@@ -48,20 +48,14 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
         mnsalir = new javax.swing.JMenu();
 
-        jsperson.setEnabled(false);
-
         jLabel2.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLabel2.setText("PERSON X GRUPO ");
 
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLabel1.setText("ONLY ONE COUPLE");
 
-        jscouple.setEnabled(false);
-
         jLabel3.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLabel3.setText("BREAK FOR LEADER");
-
-        jsbreakleader.setEnabled(false);
 
         btnaceptar.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnaceptar.setText("ACEPTAR");
@@ -83,15 +77,15 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jbSettingLayout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jsbreakleader, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jsBreakXLeader, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jbSettingLayout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jscouple, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jbSettingLayout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(76, 76, 76)
-                                .addComponent(jsperson, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(jbSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel1))
+                                .addGap(72, 72, 72)
+                                .addGroup(jbSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(chkOneCouple)
+                                    .addComponent(jsPersonXGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jbSettingLayout.createSequentialGroup()
                         .addGap(74, 74, 74)
                         .addComponent(btnaceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -103,14 +97,14 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                 .addGap(22, 22, 22)
                 .addGroup(jbSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jsperson, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                    .addComponent(jsPersonXGroup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31)
+                .addGroup(jbSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(chkOneCouple))
+                .addGap(37, 37, 37)
                 .addGroup(jbSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jscouple, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(40, 40, 40)
-                .addGroup(jbSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jsbreakleader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jsBreakXLeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
                 .addComponent(btnaceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -185,18 +179,20 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         File archivoConfig = new File(nombreArchivo);
         Scanner sc = null;
         ArrayList<Member> allMembers = new ArrayList();
+        int contCouples = 0;
         try{
             sc = new Scanner( archivoConfig );
             while( sc.hasNext() ){
                 String actual = sc.nextLine();
                 if (actual.contains(",")) {
                     allMembers.add(0, new Member(actual, true));
+                    contCouples++;
                 } else {
                     allMembers.add(new Member(actual, false));
                 }
             }
         } catch(Exception e) {}
-       
+        final int totalCouples = contCouples;
         if(allMembers.size()>0){
             this.jbSetting.pack();
             this.jbSetting.setLocationRelativeTo(this);
@@ -205,6 +201,12 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     for (Member member : allMembers) {
                         System.out.println(member.toString());
+                    }
+                    int personXGroup = (int)jsPersonXGroup.getValue();
+                    int totalPersons = allMembers.size() + totalCouples;
+                    int totalGroups = (int)(totalPersons / personXGroup);
+                    if (chkOneCouple.isSelected()) {
+                        Member actualMember = allMembers.get(0);
                     }
                     jbSetting.setVisible(false);
                 }
@@ -269,6 +271,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnaceptar;
+    private javax.swing.JCheckBox chkOneCouple;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -278,9 +281,8 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JDialog jbSetting;
     private javax.swing.JMenuItem jmfile;
-    private javax.swing.JSpinner jsbreakleader;
-    private javax.swing.JSpinner jscouple;
-    private javax.swing.JSpinner jsperson;
+    private javax.swing.JSpinner jsBreakXLeader;
+    private javax.swing.JSpinner jsPersonXGroup;
     private javax.swing.JMenu mnsalir;
     // End of variables declaration//GEN-END:variables
 }
