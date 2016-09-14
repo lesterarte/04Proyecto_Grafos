@@ -5,6 +5,8 @@
  */
 package proyecto_grafos_conjuntos_listas;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Lesterarte
@@ -14,7 +16,11 @@ public class Settings extends javax.swing.JDialog {
     /**
      * Creates new form Settings
      */
-    public Settings(java.awt.Frame parent, boolean modal) {
+    public Settings(java.awt.Frame parent, boolean modal, ArrayList<Member> allMembers) {
+        super(parent, modal);
+        initComponents();
+    }
+     public Settings(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -55,12 +61,6 @@ public class Settings extends javax.swing.JDialog {
                 btnaceptarActionPerformed(evt);
             }
         });
-
-        jsperson.setEnabled(false);
-
-        jscouple.setEnabled(false);
-
-        jsbreakleader.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
