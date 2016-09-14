@@ -42,8 +42,6 @@ public class Group {
     
     public void addMember(Member newMember){
         
-    }
-    
-  
+    }  
     
 }
