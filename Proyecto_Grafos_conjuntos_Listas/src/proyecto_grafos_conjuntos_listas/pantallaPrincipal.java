@@ -7,6 +7,7 @@ package proyecto_grafos_conjuntos_listas;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -99,9 +100,9 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(jsPersonXGroup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31)
-                .addGroup(jbSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(chkOneCouple))
+                .addGroup(jbSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chkOneCouple)
+                    .addComponent(jLabel1))
                 .addGap(37, 37, 37)
                 .addGroup(jbSettingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jsBreakXLeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -199,16 +200,43 @@ public class pantallaPrincipal extends javax.swing.JFrame {
             this.jbSetting.setVisible(true);
             this.btnaceptar.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    for (Member member : allMembers) {
-                        System.out.println(member.toString());
-                    }
+                    
                     int personXGroup = (int)jsPersonXGroup.getValue();
                     int totalPersons = allMembers.size() + totalCouples;
                     int totalGroups = (int)(totalPersons / personXGroup);
-                    if (chkOneCouple.isSelected()) {
-                        Member actualMember = allMembers.get(0);
-                    }
+                    int maxCouples = totalCouples;
+                    boolean oneCouple = chkOneCouple.isSelected();
+                    //if (chkOneCouple.isSelected()) {
+                        ArrayList<Group> allGroups = new ArrayList(); 
+                        for (int i = 0; i < totalGroups; i++) {
+                            allGroups.add(new Group());
+                            Group actualGroup = allGroups.get(i);
+                            Member actualMember = allMembers.get(0);
+                            if (oneCouple && actualMember.isCouple()) {
+                                actualGroup.addMember(actualMember);
+                                allMembers.remove(0);
+                                maxCouples--;
+                            }
+                            while (actualGroup.getCantMembers() < personXGroup && !allMembers.isEmpty()) {
+                                int rand = (int)(Math.random() * (allMembers.size() - maxCouples) + maxCouples - 1);
+                                System.out.println(allMembers.size() + " === "+ rand);
+                                actualMember = allMembers.get(rand);
+                                actualGroup.addMember(actualMember);
+                                allMembers.remove(rand);
+                            }   
+                        }
+                        for (int j = 0; j < allMembers.size(); j++) {
+                            allGroups.get(j).addMember(allMembers.get(j));
+                        }
+                        
+                        for (Group allGroup : allGroups) {
+                            
+                            System.out.println(allGroup.toString());                        
+                        }
+                        
+                    //}
                     jbSetting.setVisible(false);
+                    
                 }
             });
         }

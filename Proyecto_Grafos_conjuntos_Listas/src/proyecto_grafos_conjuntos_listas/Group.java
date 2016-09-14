@@ -14,6 +14,7 @@ public class Group {
     }
 
     public Group() {
+        Members = new TDA_Set();
     }
 
     public Member getLeader() {
@@ -44,8 +45,8 @@ public class Group {
         return cantCouples > 0;    
     }  
     
-    public int cantMembers(){
-        return this.Members.getCountKies();
+    public int getCantMembers(){
+        return this.Members.getCountKies() + this.cantCouples;
     }
     
     public void addMember(Member newMember){
@@ -53,6 +54,12 @@ public class Group {
         if (newMember.isCouple()) {
             this.cantCouples++;
         }
-    }  
+    } 
+
+    @Override
+    public String toString() {
+        return "Group{" + "cantCouples=" + cantCouples + ", Members=" + Members.toString() + ", Leader=" + Leader + '}';
+    }
+    
     
 }

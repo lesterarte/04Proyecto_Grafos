@@ -40,4 +40,11 @@ public class TDA_Set {
     public int getCountKies() {
         return keys.size();
     }
+    public String toString() {
+        String text = "";
+        for (String key : keys) {
+            text += key + ", ";
+        }
+        return text;
+    }
 }
