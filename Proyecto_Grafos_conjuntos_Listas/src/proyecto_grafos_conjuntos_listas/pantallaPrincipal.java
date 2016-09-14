@@ -5,6 +5,9 @@
  */
 package proyecto_grafos_conjuntos_listas;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -92,11 +95,26 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jmfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmfileActionPerformed
-       FileNameExtensionFilter filter = new  FileNameExtensionFilter("txt","txt");
-       JFileChooser FSArchivo = new JFileChooser();
-       FSArchivo.setFileFilter(filter);
-       int opcion = FSArchivo.showDialog(FSArchivo, "aceptar");
-       String nombreArchivo = FSArchivo.getSelectedFile().toString();
+        FileNameExtensionFilter filter = new  FileNameExtensionFilter("txt","txt");
+        JFileChooser FSArchivo = new JFileChooser();
+        FSArchivo.setFileFilter(filter);
+        int opcion = FSArchivo.showDialog(FSArchivo, "aceptar");
+        String nombreArchivo = FSArchivo.getSelectedFile().toString();
+        File archivoConfig = new File(nombreArchivo);
+        Scanner sc = null;
+        ArrayList<Member> allMembers = new ArrayList();
+        try{
+            sc = new Scanner( archivoConfig );
+            while( sc.hasNext() ){
+                String actual = sc.nextLine();
+                if (actual.contains(",")) {
+                    allMembers.add(0, new Member(actual, true));
+                } else {
+                    allMembers.add(new Member(actual, false));
+                }
+            }
+        } catch(Exception e) {}
+        System.out.println(allMembers);
     }//GEN-LAST:event_jmfileActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed

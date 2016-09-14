@@ -1,32 +1,23 @@
 package proyecto_grafos_conjuntos_listas;
 public class Member {
-    private String name, coupleName;
+    private String name;
+    boolean isCouple = false;
     int breakForLeader;
 
     public Member(String name) {
         this.name = name;
     }
-
-    public Member(String name, String coupleName) {
+    public Member(String name, boolean isCouple) {
         this.name = name;
-        this.coupleName = coupleName;
-    }
-
-    public Member(String name, String coupleName, int breakForLeader) {
-        this.name = name;
-        this.coupleName = coupleName;
-        this.breakForLeader = breakForLeader;
+        this.isCouple = isCouple;
     }
 
     public Member(String name, int breakForLeader) {
         this.name = name;
         this.breakForLeader = breakForLeader;
     }
-    public String getCouple() {
-        return coupleName;
-    }
-    public boolean hasCouple() {
-        return !coupleName.equals("");
+    public boolean isCouple() {
+        return this.isCouple;
     }
 
     public String getName() {
@@ -35,14 +26,6 @@ public class Member {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCoupleName() {
-        return coupleName;
-    }
-
-    public void setCoupleName(String coupleName) {
-        this.coupleName = coupleName;
     }
 
     public int getBreakForLeader() {
