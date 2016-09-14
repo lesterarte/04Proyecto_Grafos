@@ -1,7 +1,7 @@
 package proyecto_grafos_conjuntos_listas;
 public class Member {
     private String name;
-    boolean isCouple = false;
+    boolean couple = false;
     int breakForLeader;
 
     public Member(String name) {
@@ -9,7 +9,7 @@ public class Member {
     }
     public Member(String name, boolean isCouple) {
         this.name = name;
-        this.isCouple = isCouple;
+        this.couple = isCouple;
     }
 
     public Member(String name, int breakForLeader) {
@@ -17,7 +17,7 @@ public class Member {
         this.breakForLeader = breakForLeader;
     }
     public boolean isCouple() {
-        return this.isCouple;
+        return this.couple;
     }
 
     public String getName() {
@@ -35,5 +35,7 @@ public class Member {
     public void setBreakForLeader(int breakForLeader) {
         this.breakForLeader = breakForLeader;
     }
-    
+    public String toString() {
+        return "Name: " + this.name + " isCouple: " + this.couple;
+    }
 }

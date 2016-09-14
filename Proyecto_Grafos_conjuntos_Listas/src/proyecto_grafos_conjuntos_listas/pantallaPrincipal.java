@@ -119,7 +119,9 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                 }
             }
         } catch(Exception e) {}
-        System.out.println(allMembers);
+        for (Member member : allMembers) {
+            System.out.println(member.toString());
+        }
     }//GEN-LAST:event_jmfileActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
