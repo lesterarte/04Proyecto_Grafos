@@ -56,6 +56,12 @@ public class Settings extends javax.swing.JDialog {
             }
         });
 
+        jsperson.setEnabled(false);
+
+        jscouple.setEnabled(false);
+
+        jsbreakleader.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(

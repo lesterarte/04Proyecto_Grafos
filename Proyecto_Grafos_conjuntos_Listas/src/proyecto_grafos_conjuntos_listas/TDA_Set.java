@@ -2,10 +2,6 @@ package proyecto_grafos_conjuntos_listas;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author oscarito
- */
 public class TDA_Set {
     private ArrayList<String> keys = new ArrayList<String>();
     private ArrayList<Object> values = new ArrayList<Object>();
