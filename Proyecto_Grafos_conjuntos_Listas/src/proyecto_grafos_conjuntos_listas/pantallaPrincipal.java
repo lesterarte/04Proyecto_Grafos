@@ -210,6 +210,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                     int totalGroups = (int)(totalPersons / personXGroup);
                     int breaksXLeader = (int)jsBreakXLeader.getValue();
                     boolean oneCouple = chkOneCouple.isSelected();
+                    Grafo newGrafo = createGraph(allMembers);
                     int maxCouples = oneCouple ? totalCouples : 0;
                     //if (chkOneCouple.isSelected()) {
                         ArrayList<Group> newSetGroups = new ArrayList();
@@ -218,7 +219,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                             Group actualGroup = newSetGroups.get(i);
                             Member actualMember = allMembers.get(0);
                             if (oneCouple && actualMember.isCouple()) {
-                                actualGroup.addMember(actualMember);
+                                actualGroup.addMember(actualMember,newGrafo);
 //                              if (actualMember.getBreakForLeader() == 0) {
                                 actualMember.setBreakForLeader(breaksXLeader);
 //                                    actualGroup.setLeader(actualMember.getName());
@@ -236,7 +237,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                                     }
                                 }
                                 actualMember.setBreakForLeader(breaksXLeader);
-                                actualGroup.addMember(actualMember);
+                                actualGroup.addMember(actualMember,newGrafo);
                                 allMembers.remove(rand);
                             }   
                         }
@@ -250,7 +251,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                             
                             
                                 allMembers.get(j).setBreakForLeader(breaksXLeader);
-                            newSetGroups.get(groupIndex).addMember(allMembers.get(j));
+                            newSetGroups.get(groupIndex).addMember(allMembers.get(j),newGrafo);
                             groupIndex++;
                         }
                         allGroups.add(newSetGroups);
