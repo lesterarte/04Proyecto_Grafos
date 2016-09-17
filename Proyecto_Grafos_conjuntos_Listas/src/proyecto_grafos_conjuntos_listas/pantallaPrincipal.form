@@ -100,9 +100,6 @@
             </Property>
             <Property name="text" type="java.lang.String" value="ACEPTAR"/>
           </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnaceptarActionPerformed"/>
-          </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="chkOneCouple">
         </Component>

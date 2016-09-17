@@ -51,9 +51,11 @@ public class Group implements Serializable{
         return this.Members.getCountKies() + this.cantCouples;
     }
     
-    public void addMember(Member newMember){
+    public void addMember(Member newMember, Grafo friendlyGraph){
         if (Leader == null && newMember.getBreakForLeader() == 0) {
             Leader = newMember.getName();
+        } else {
+            friendlyGraph.addEdge(newMember.getName() + "->" + Leader, newMember.getName(), Leader);
         }
         this.Members.put(newMember.getName(), newMember);
         if (newMember.isCouple()) {
@@ -65,6 +67,4 @@ public class Group implements Serializable{
     public String toString() {
         return "Group{" + "cantCouples=" + cantCouples + ", Members=" + Members.toString() + ", Leader=" + Leader + '}';
     }
-    
-    
 }

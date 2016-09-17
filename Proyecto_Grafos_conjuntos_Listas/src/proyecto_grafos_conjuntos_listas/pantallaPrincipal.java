@@ -76,11 +76,6 @@ public class pantallaPrincipal extends javax.swing.JFrame {
 
         btnaceptar.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnaceptar.setText("ACEPTAR");
-        btnaceptar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnaceptarActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jbSettingLayout = new javax.swing.GroupLayout(jbSetting.getContentPane());
         jbSetting.getContentPane().setLayout(jbSettingLayout);
@@ -249,7 +244,9 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jmfileActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-                
+        this.jbSetting.pack();
+        this.jbSetting.setVisible(true);
+        this.jbSetting.setLocationRelativeTo(this);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
@@ -263,10 +260,6 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenu1ActionPerformed
-
-    private void btnaceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaceptarActionPerformed
-
-    }//GEN-LAST:event_btnaceptarActionPerformed
 
     private void jdSetGroupsComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jdSetGroupsComponentShown
         // TODO add your handling code here:
@@ -338,6 +331,10 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         } catch(Exception e) {}
         return new Object[]{allMembers, contCouples};
     }
+    /**
+     * Este método enlaza los eventos de los componentes del GUI
+     * @param allGroups 
+     */
     public void bindEvents(ArrayList allGroups) {
         jdSetGroups.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
@@ -379,6 +376,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                 Object[] data = readMembers(archivoConfig);
                 ArrayList<Member> allMembers = (ArrayList<Member>)data[0];
                 final int totalCouples = (int)data[1];
+                Grafo friendlyGraph = createGraph(allMembers);
                 if(allMembers.size()>0){
                     jbSetting.pack();
                     jbSetting.setLocationRelativeTo(scope);
@@ -388,7 +386,6 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                      */
                     btnaceptar.addMouseListener(new java.awt.event.MouseAdapter() {
                         public void mouseClicked(java.awt.event.MouseEvent evt) {
-
                             int personXGroup = (int)jsPersonXGroup.getValue();
                             int totalPersons = allMembers.size() + totalCouples;
                             int totalGroups = (int)(totalPersons / personXGroup);
@@ -402,39 +399,43 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                                     Group actualGroup = newSetGroups.get(i);
                                     Member actualMember = allMembers.get(0);
                                     if (oneCouple && actualMember.isCouple()) {
-                                        actualGroup.addMember(actualMember);
-        //                              if (actualMember.getBreakForLeader() == 0) {
-                                        actualMember.setBreakForLeader(breaksXLeader);
-        //                                    actualGroup.setLeader(actualMember.getName());
-        //                                }
-                                        allMembers.remove(0);
-                                        maxCouples--;
+                                       actualGroup.addMember(actualMember, friendlyGraph);
+                                       actualMember.setBreakForLeader(breaksXLeader);
+                                       allMembers.remove(0);
+                                       maxCouples--;
                                     }
                                     while ((actualMember.isCouple() ? actualGroup.getCantMembers() + 1 : actualGroup.getCantMembers()) < personXGroup && !allMembers.isEmpty()) {
                                         int rand = (int)(Math.random() * (allMembers.size() - maxCouples) + maxCouples - 1);
                                         actualMember = allMembers.get(rand);
-                                        if (actualGroup.getCantMembers() == personXGroup - 1) {
+                                        if (actualGroup.getCantMembers() == (actualMember.isCouple() ? 1 : 0) && actualGroup.getLeader() == null) {
                                             while (actualMember.getBreakForLeader() > 0) {
                                                 rand = (int)(Math.random() * (allMembers.size() - maxCouples) + maxCouples - 1);
                                                 actualMember = allMembers.get(rand);
                                             }
                                         }
+                                        Edge edgeToLeader = friendlyGraph.getEdge(actualMember.getName() + "->" + actualGroup.getLeader().getName());
+                                        if (actualGroup.getCantMembers() == (actualMember.isCouple() ? 2 : 1) && edgeToLeader != null) {
+                                            while (edgeToLeader != null) {
+                                                rand = (int)(Math.random() * (allMembers.size() - maxCouples) + maxCouples - 1);
+                                                actualMember = allMembers.get(rand);
+                                                edgeToLeader = friendlyGraph.getEdge(actualMember.getName() + "->" + actualGroup.getLeader().getName());
+                                            }
+                                            
+                                        }
                                         actualMember.setBreakForLeader(breaksXLeader);
-                                        actualGroup.addMember(actualMember);
+                                        actualGroup.addMember(actualMember, friendlyGraph);
                                         allMembers.remove(rand);
                                     }   
                                 }
                                 int groupIndex = 0;
                                 for (int j = 0; j < allMembers.size(); j++) {
-        //                            Member actualMember = allMembers.get(0);
                                     if (newSetGroups.get(groupIndex).getCantMembers() > personXGroup) {
                                         groupIndex++;
                                         continue;
                                     }
 
-
-                                        allMembers.get(j).setBreakForLeader(breaksXLeader);
-                                    newSetGroups.get(groupIndex).addMember(allMembers.get(j));
+                                    allMembers.get(j).setBreakForLeader(breaksXLeader);
+                                    newSetGroups.get(groupIndex).addMember(allMembers.get(j), friendlyGraph);
                                     groupIndex++;
                                 }
                                 allGroups.add(newSetGroups);
