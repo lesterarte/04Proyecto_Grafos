@@ -56,5 +56,9 @@ public class TDA_Set  implements Serializable {
     public void setValues(ArrayList<Object> values) {
         this.values = values;
     }
+
+    public ArrayList<String> getKeys() {
+        return keys;
+    }
     
 }

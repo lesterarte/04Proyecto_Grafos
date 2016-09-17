@@ -51,17 +51,28 @@ public class Group implements Serializable{
         return this.Members.getCountKies() + this.cantCouples;
     }
     
-    public void addMember(Member newMember, Grafo friendlyGraph){
+    public void addMember(Member newMember, Grafo friendlyGraph, int breakXLeader){
         if (Leader == null && newMember.getBreakForLeader() == 0) {
+            newMember.setBreakForLeader(breakXLeader);
             Leader = newMember.getName();
         } else {
-            friendlyGraph.addEdge(newMember.getName() + "->" + Leader, newMember.getName(), Leader);
+            if (Leader != null && newMember.getName() != null) {
+                System.out.println(friendlyGraph.getEdge(newMember.getName() + "->" + Leader) + "EDGE");
+                if (friendlyGraph.getEdge(newMember.getName() + "->" + Leader) == null) {
+                    friendlyGraph.addEdge(newMember.getName() + "->" + Leader, newMember.getName(), Leader);
+                }
+            }
+            newMember.setVisitedHouses(Leader);
         }
         this.Members.put(newMember.getName(), newMember);
         if (newMember.isCouple()) {
             this.cantCouples++;
         }
-    } 
+        if (newMember.getBreakForLeader() > 0) {
+            newMember.setBreakForLeader(newMember.getBreakForLeader() - 1);
+        }
+    }
+    
 
     @Override
     public String toString() {

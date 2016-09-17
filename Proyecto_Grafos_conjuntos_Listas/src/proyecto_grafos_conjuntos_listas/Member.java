@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Member  implements Serializable {
-    private TDA_Set visitedHouses;
+    private TDA_Set visitedHouses = new TDA_Set();
     private String name;
     private boolean couple = false;
     private int breakForLeader = 0;
@@ -44,12 +44,16 @@ public class Member  implements Serializable {
     public void setVisitedHouses(String noVisitedHouse){
         this.visitedHouses.put(noVisitedHouse, noVisitedHouse);
     }
+
+    public TDA_Set getVisitedHouses() {
+        return visitedHouses;
+    }
     
     
 
     @Override
     public String toString() {
-        return name + "(" + breakForLeader + ')';
+        return name + "(" + breakForLeader + ')' + this.visitedHouses.getKeys().toString();
     }
     
     
