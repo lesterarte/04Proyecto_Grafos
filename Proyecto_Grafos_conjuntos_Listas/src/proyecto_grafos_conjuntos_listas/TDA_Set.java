@@ -48,4 +48,13 @@ public class TDA_Set  implements Serializable {
         }
         return text;
     }
+
+    public ArrayList<Object> getValues() {
+        return values;
+    }
+
+    public void setValues(ArrayList<Object> values) {
+        this.values = values;
+    }
+    
 }

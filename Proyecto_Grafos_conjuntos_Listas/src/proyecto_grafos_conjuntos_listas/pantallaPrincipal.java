@@ -5,6 +5,7 @@
  */
 package proyecto_grafos_conjuntos_listas;
 
+import java.awt.Component;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -26,6 +27,8 @@ public class pantallaPrincipal extends javax.swing.JFrame {
      */
     public pantallaPrincipal() {
         initComponents();
+        ArrayList allGroups = readGroups();
+        bindEvents(allGroups);
     }
 
     /**
@@ -45,11 +48,17 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         jsBreakXLeader = new javax.swing.JSpinner();
         btnaceptar = new javax.swing.JButton();
         chkOneCouple = new javax.swing.JCheckBox();
+        jdSetGroups = new javax.swing.JDialog();
+        jToolBar1 = new javax.swing.JToolBar();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jpAllGroups = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jmfile = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         mnsalir = new javax.swing.JMenu();
 
         jLabel2.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
@@ -115,6 +124,55 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                 .addGap(30, 30, 30))
         );
 
+        jdSetGroups.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                jdSetGroupsComponentShown(evt);
+            }
+        });
+
+        jToolBar1.setRollover(true);
+
+        jButton1.setText("Anterior");
+        jButton1.setFocusable(false);
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton1);
+
+        jButton2.setText("Siguiente");
+        jButton2.setFocusable(false);
+        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton2);
+
+        javax.swing.GroupLayout jpAllGroupsLayout = new javax.swing.GroupLayout(jpAllGroups);
+        jpAllGroups.setLayout(jpAllGroupsLayout);
+        jpAllGroupsLayout.setHorizontalGroup(
+            jpAllGroupsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jpAllGroupsLayout.setVerticalGroup(
+            jpAllGroupsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 348, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jdSetGroupsLayout = new javax.swing.GroupLayout(jdSetGroups.getContentPane());
+        jdSetGroups.getContentPane().setLayout(jdSetGroupsLayout);
+        jdSetGroupsLayout.setHorizontalGroup(
+            jdSetGroupsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE)
+            .addGroup(jdSetGroupsLayout.createSequentialGroup()
+                .addComponent(jpAllGroups, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jdSetGroupsLayout.setVerticalGroup(
+            jdSetGroupsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jdSetGroupsLayout.createSequentialGroup()
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jpAllGroups, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jMenu1.setText("File");
@@ -148,6 +206,14 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem3);
 
+        jMenuItem1.setText("Show Groups");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
         jMenuBar1.add(jMenu1);
 
         mnsalir.setText("Exit");
@@ -176,91 +242,6 @@ public class pantallaPrincipal extends javax.swing.JFrame {
 
     private void jmfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmfileActionPerformed
         
-        ArrayList allGroups = readGroups();
-        FileNameExtensionFilter filter = new  FileNameExtensionFilter("txt","txt");
-        JFileChooser FSArchivo = new JFileChooser();
-        FSArchivo.setFileFilter(filter);
-        int opcion = FSArchivo.showDialog(FSArchivo, "Aceptar");
-        if (opcion == JFileChooser.CANCEL_OPTION) {
-            return;
-        }
-        String nombreArchivo = FSArchivo.getSelectedFile().toString();
-        File archivoConfig = new File(nombreArchivo);
-        
-        //Get data from file
-        Object[] data = readMembers(archivoConfig);
-        ArrayList<Member> allMembers = (ArrayList<Member>)data[0];
-        final int totalCouples = (int)data[1];
-        if(allMembers.size()>0){
-            this.jbSetting.pack();
-            this.jbSetting.setLocationRelativeTo(this);
-            this.jbSetting.setVisible(true);
-            /**
-             * Inyeccion del evento click del boton aceptar del dialogo settings
-             */
-            this.btnaceptar.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    
-                    int personXGroup = (int)jsPersonXGroup.getValue();
-                    int totalPersons = allMembers.size() + totalCouples;
-                    int totalGroups = (int)(totalPersons / personXGroup);
-                    int breaksXLeader = (int)jsBreakXLeader.getValue();
-                    boolean oneCouple = chkOneCouple.isSelected();
-                    int maxCouples = oneCouple ? totalCouples : 0;
-                    //if (chkOneCouple.isSelected()) {
-                        ArrayList<Group> newSetGroups = new ArrayList();
-                        for (int i = 0; i < totalGroups; i++) {
-                            newSetGroups.add(new Group());
-                            Group actualGroup = newSetGroups.get(i);
-                            Member actualMember = allMembers.get(0);
-                            if (oneCouple && actualMember.isCouple()) {
-                                actualGroup.addMember(actualMember);
-//                              if (actualMember.getBreakForLeader() == 0) {
-                                actualMember.setBreakForLeader(breaksXLeader);
-//                                    actualGroup.setLeader(actualMember.getName());
-//                                }
-                                allMembers.remove(0);
-                                maxCouples--;
-                            }
-                            while ((actualMember.isCouple() ? actualGroup.getCantMembers() + 1 : actualGroup.getCantMembers()) < personXGroup && !allMembers.isEmpty()) {
-                                int rand = (int)(Math.random() * (allMembers.size() - maxCouples) + maxCouples - 1);
-                                actualMember = allMembers.get(rand);
-                                if (actualGroup.getCantMembers() == personXGroup - 1) {
-                                    while (actualMember.getBreakForLeader() > 0) {
-                                        rand = (int)(Math.random() * (allMembers.size() - maxCouples) + maxCouples - 1);
-                                        actualMember = allMembers.get(rand);
-                                    }
-                                }
-                                actualMember.setBreakForLeader(breaksXLeader);
-                                actualGroup.addMember(actualMember);
-                                allMembers.remove(rand);
-                            }   
-                        }
-                        int groupIndex = 0;
-                        for (int j = 0; j < allMembers.size(); j++) {
-//                            Member actualMember = allMembers.get(0);
-                            if (newSetGroups.get(groupIndex).getCantMembers() > personXGroup) {
-                                groupIndex++;
-                                continue;
-                            }
-                            
-                            
-                                allMembers.get(j).setBreakForLeader(breaksXLeader);
-                            newSetGroups.get(groupIndex).addMember(allMembers.get(j));
-                            groupIndex++;
-                        }
-                        allGroups.add(newSetGroups);
-                        saveGroups(allGroups);
-                        for (Group allGroup : newSetGroups) {
-                            System.out.println(allGroup.toString());                        
-                        }
-                        
-                    //}
-                    jbSetting.setVisible(false);
-                    
-                }
-            });
-        }
     }//GEN-LAST:event_jmfileActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -282,6 +263,18 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void btnaceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaceptarActionPerformed
 
     }//GEN-LAST:event_btnaceptarActionPerformed
+
+    private void jdSetGroupsComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jdSetGroupsComponentShown
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jdSetGroupsComponentShown
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        this.jdSetGroups.pack();
+        this.jdSetGroups.setVisible(true);
+        this.jdSetGroups.setLocationRelativeTo(this);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
     /**
      * 
      * @param allGroups Arreglo de arreglos de grupos
@@ -326,6 +319,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         Scanner sc = null;
         ArrayList<Member> allMembers = new ArrayList<Member>();
         int contCouples = 0;
+        int leaders = 0;
         try{
             sc = new Scanner( inFile );
             while( sc.hasNext() ){
@@ -339,6 +333,120 @@ public class pantallaPrincipal extends javax.swing.JFrame {
             }
         } catch(Exception e) {}
         return new Object[]{allMembers, contCouples};
+    }
+    public void bindEvents(ArrayList allGroups) {
+        jdSetGroups.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                for (Object object : allGroups) {
+                    ArrayList<Group> actualSet = (ArrayList<Group>)object;
+                    for (Group group : actualSet) {
+                        int pos = actualSet.indexOf(group);
+                        groupPanel viewGroup = new groupPanel(group, pos + 1);
+                        viewGroup.setBounds(pos * 200, 0, 200, 150);
+                        viewGroup.setVisible(true);
+                        jpAllGroups.add( viewGroup );
+                        jpAllGroups.repaint();
+                        jpAllGroups.validate();
+                        jdSetGroups.repaint();
+                        jdSetGroups.validate();
+                        
+                    }
+                }
+            }
+        });
+        
+        
+        //Menu
+        Component scope = this;
+        jmfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                
+                FileNameExtensionFilter filter = new  FileNameExtensionFilter("txt","txt");
+                JFileChooser FSArchivo = new JFileChooser();
+                FSArchivo.setFileFilter(filter);
+                int opcion = FSArchivo.showDialog(FSArchivo, "Aceptar");
+                if (opcion == JFileChooser.CANCEL_OPTION) {
+                    return;
+                }
+                String nombreArchivo = FSArchivo.getSelectedFile().toString();
+                File archivoConfig = new File(nombreArchivo);
+
+                //Get data from file
+                Object[] data = readMembers(archivoConfig);
+                ArrayList<Member> allMembers = (ArrayList<Member>)data[0];
+                final int totalCouples = (int)data[1];
+                if(allMembers.size()>0){
+                    jbSetting.pack();
+                    jbSetting.setLocationRelativeTo(scope);
+                    jbSetting.setVisible(true);
+                    /**
+                     * Inyeccion del evento click del boton aceptar del dialogo settings
+                     */
+                    btnaceptar.addMouseListener(new java.awt.event.MouseAdapter() {
+                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+
+                            int personXGroup = (int)jsPersonXGroup.getValue();
+                            int totalPersons = allMembers.size() + totalCouples;
+                            int totalGroups = (int)(totalPersons / personXGroup);
+                            int breaksXLeader = (int)jsBreakXLeader.getValue();
+                            boolean oneCouple = chkOneCouple.isSelected();
+                            int maxCouples = oneCouple ? totalCouples : 0;
+                            //if (chkOneCouple.isSelected()) {
+                                ArrayList<Group> newSetGroups = new ArrayList();
+                                for (int i = 0; i < totalGroups; i++) {
+                                    newSetGroups.add(new Group());
+                                    Group actualGroup = newSetGroups.get(i);
+                                    Member actualMember = allMembers.get(0);
+                                    if (oneCouple && actualMember.isCouple()) {
+                                        actualGroup.addMember(actualMember);
+        //                              if (actualMember.getBreakForLeader() == 0) {
+                                        actualMember.setBreakForLeader(breaksXLeader);
+        //                                    actualGroup.setLeader(actualMember.getName());
+        //                                }
+                                        allMembers.remove(0);
+                                        maxCouples--;
+                                    }
+                                    while ((actualMember.isCouple() ? actualGroup.getCantMembers() + 1 : actualGroup.getCantMembers()) < personXGroup && !allMembers.isEmpty()) {
+                                        int rand = (int)(Math.random() * (allMembers.size() - maxCouples) + maxCouples - 1);
+                                        actualMember = allMembers.get(rand);
+                                        if (actualGroup.getCantMembers() == personXGroup - 1) {
+                                            while (actualMember.getBreakForLeader() > 0) {
+                                                rand = (int)(Math.random() * (allMembers.size() - maxCouples) + maxCouples - 1);
+                                                actualMember = allMembers.get(rand);
+                                            }
+                                        }
+                                        actualMember.setBreakForLeader(breaksXLeader);
+                                        actualGroup.addMember(actualMember);
+                                        allMembers.remove(rand);
+                                    }   
+                                }
+                                int groupIndex = 0;
+                                for (int j = 0; j < allMembers.size(); j++) {
+        //                            Member actualMember = allMembers.get(0);
+                                    if (newSetGroups.get(groupIndex).getCantMembers() > personXGroup) {
+                                        groupIndex++;
+                                        continue;
+                                    }
+
+
+                                        allMembers.get(j).setBreakForLeader(breaksXLeader);
+                                    newSetGroups.get(groupIndex).addMember(allMembers.get(j));
+                                    groupIndex++;
+                                }
+                                allGroups.add(newSetGroups);
+                                saveGroups(allGroups);
+                                for (Group allGroup : newSetGroups) {
+                                    System.out.println(allGroup.toString());                        
+                                }
+
+                            //}
+                            jbSetting.setVisible(false);
+
+                        }
+                    });
+                }
+            }
+        });
     }
     /**
      * @param args the command line arguments
@@ -378,15 +486,21 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnaceptar;
     private javax.swing.JCheckBox chkOneCouple;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JDialog jbSetting;
+    private javax.swing.JDialog jdSetGroups;
     private javax.swing.JMenuItem jmfile;
+    private javax.swing.JPanel jpAllGroups;
     private javax.swing.JSpinner jsBreakXLeader;
     private javax.swing.JSpinner jsPersonXGroup;
     private javax.swing.JMenu mnsalir;
