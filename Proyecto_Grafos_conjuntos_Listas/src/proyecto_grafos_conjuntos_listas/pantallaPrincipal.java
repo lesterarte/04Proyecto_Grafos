@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.graphstream.graph.Edge;
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.SingleGraph;
 
 /**
  *
@@ -339,6 +343,30 @@ public class pantallaPrincipal extends javax.swing.JFrame {
             }
         } catch(Exception e) {}
         return new Object[]{allMembers, contCouples};
+    }
+    
+    public Grafo createGraph(ArrayList<Member> allMembers){
+        
+        Grafo newGraph = new Grafo("Members");  
+        newGraph.addAttribute("ui.quality");
+        newGraph.addAttribute("ui.antialias");
+        System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
+        newGraph.addAttribute("ui.stylehseet", "url('http://somewere/in/the/clouds/stylesheet')");
+        newGraph.addAttribute("ui.style", "padding: 45px;");
+        for (int i = 0; i < allMembers.size(); i++) {
+           newGraph.addNode(allMembers.get(i));
+        }
+      
+       //labels nodes
+       for(Node n:newGraph){
+            n.addAttribute("ui.label",n.getId());
+            n.addAttribute("ui.style", "text-alignment: at-right; text-padding:"
+                    + " 4px, 3px; text-background-mode: rounded-box; "
+                    + "text-background-color: #A7CC; text-color: white; "
+                    + "text-style: bold-italic; text-color: #FFF;");     
+       }     
+       return newGraph;
+        
     }
     /**
      * @param args the command line arguments
