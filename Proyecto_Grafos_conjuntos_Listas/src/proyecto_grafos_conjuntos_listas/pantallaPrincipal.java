@@ -19,6 +19,7 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.view.Viewer;
 
 /**
  *
@@ -61,10 +62,9 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jmfile = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
         JMgraph = new javax.swing.JMenuItem();
-       mnsalir = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        mnsalir = new javax.swing.JMenu();
 
         jLabel2.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLabel2.setText("PERSON X GRUPO ");
@@ -183,11 +183,6 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         });
 
         jmfile.setText("Select file");
-        jmfile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jmfileActionPerformed(evt);
-            }
-        });
         jMenu1.add(jmfile);
 
         jMenuItem2.setText("Create groups");
@@ -239,30 +234,6 @@ public class pantallaPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jmfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmfileActionPerformed
-        
-        FileNameExtensionFilter filter = new  FileNameExtensionFilter("txt","txt");
-        JFileChooser FSArchivo = new JFileChooser();
-        FSArchivo.setFileFilter(filter);
-        int opcion = FSArchivo.showDialog(FSArchivo, "Aceptar");
-        if (opcion == JFileChooser.CANCEL_OPTION) {
-            return;
-        }
-        String nombreArchivo = FSArchivo.getSelectedFile().toString();
-        File archivoConfig = new File(nombreArchivo);
-        
-        //Get data from file
-        Object[] data = readMembers(archivoConfig);
-        ArrayList<Member> allMembers = (ArrayList<Member>)data[0];
-        int totalCouples = (int)data[1];
-        if(allMembers.size()>0){
-            openSettings(allMembers, totalCouples, createGraph(allMembers));
-            /**
-             * Inyeccion del evento click del boton aceptar del dialogo settings
-             */
-        }
-    }//GEN-LAST:event_jmfileActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         
@@ -344,7 +315,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                                 }
 
                             //}
-                            friendlyGraph.display();
+//                            friendlyGraph.display();
                             saveGraph(newSetGroups); 
                            jbSetting.setVisible(false);
 
@@ -354,7 +325,8 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     }
     private void JMgraphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMgraphActionPerformed
         Grafo newGraph = readGraph();
-        newGraph.display();
+        Viewer viewer = newGraph.display();
+        viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY);
     }//GEN-LAST:event_JMgraphActionPerformed
 
     private void mnsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnsalirActionPerformed
@@ -587,7 +559,8 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                          + " 4px, 3px; text-background-mode: rounded-box; "
                          + "text-background-color: #A7CC; text-color: red; "
                          + "text-style: bold-italic;");     
-            } 
+            }
+            entrada.close();
         } catch (Exception e) {
             System.out.println("ERROR LEER ARCHIVO GRAFO graph.obj readGraph");
             System.out.println(e.toString());
@@ -642,7 +615,6 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JDialog jbSetting;
     private javax.swing.JDialog jdSetGroups;
