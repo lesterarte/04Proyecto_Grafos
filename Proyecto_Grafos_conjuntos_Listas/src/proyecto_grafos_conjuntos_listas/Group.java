@@ -58,8 +58,11 @@ public class Group implements Serializable{
         } else {
             if (Leader != null && newMember.getName() != null) {
                 System.out.println(friendlyGraph.getEdge(newMember.getName() + "->" + Leader) + "EDGE");
-                if (friendlyGraph.getEdge(newMember.getName() + "->" + Leader) == null) {
-                    friendlyGraph.addEdge(newMember.getName() + "->" + Leader, newMember.getName(), Leader);
+                try {
+                    if (friendlyGraph.getEdge(newMember.getName() + "->" + Leader) == null) {
+                        friendlyGraph.addEdge(newMember.getName() + "->" + Leader, newMember.getName(), Leader);
+                    }
+                } catch (Exception e) {
                 }
             }
             newMember.setVisitedHouses(Leader);
