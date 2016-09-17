@@ -1,8 +1,10 @@
 package proyecto_grafos_conjuntos_listas;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Member  implements Serializable {
+    private TDA_Set visitedHouses;
     private String name;
     private boolean couple = false;
     private int breakForLeader = 0;
@@ -38,6 +40,12 @@ public class Member  implements Serializable {
     public void setBreakForLeader(int breakForLeader) {
         this.breakForLeader = breakForLeader;
     }
+
+    public void setVisitedHouses(String noVisitedHouse){
+        this.visitedHouses.put(noVisitedHouse, noVisitedHouse);
+    }
+    
+    
 
     @Override
     public String toString() {
