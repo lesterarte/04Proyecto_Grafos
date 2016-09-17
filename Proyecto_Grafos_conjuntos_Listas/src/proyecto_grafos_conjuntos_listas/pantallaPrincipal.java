@@ -63,7 +63,8 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
-        mnsalir = new javax.swing.JMenu();
+        JMgraph = new javax.swing.JMenuItem();
+       mnsalir = new javax.swing.JMenu();
 
         jLabel2.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLabel2.setText("PERSON X GRUPO ");
@@ -197,13 +198,13 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem2);
 
-        jMenuItem3.setText("Show graph");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        JMgraph.setText("Show graph");
+        JMgraph.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                JMgraphActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem3);
+        jMenu1.add(JMgraph);
 
         jMenuItem1.setText("Show Groups");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -241,6 +242,93 @@ public class pantallaPrincipal extends javax.swing.JFrame {
 
     private void jmfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmfileActionPerformed
         
+        ArrayList allGroups = readGroups();
+        FileNameExtensionFilter filter = new  FileNameExtensionFilter("txt","txt");
+        JFileChooser FSArchivo = new JFileChooser();
+        FSArchivo.setFileFilter(filter);
+        int opcion = FSArchivo.showDialog(FSArchivo, "Aceptar");
+        if (opcion == JFileChooser.CANCEL_OPTION) {
+            return;
+        }
+        String nombreArchivo = FSArchivo.getSelectedFile().toString();
+        File archivoConfig = new File(nombreArchivo);
+        
+        //Get data from file
+        Object[] data = readMembers(archivoConfig);
+        ArrayList<Member> allMembers = (ArrayList<Member>)data[0];
+        final int totalCouples = (int)data[1];
+        if(allMembers.size()>0){
+            this.jbSetting.pack();
+            this.jbSetting.setLocationRelativeTo(this);
+            this.jbSetting.setVisible(true);
+            /**
+             * Inyeccion del evento click del boton aceptar del dialogo settings
+             */
+            this.btnaceptar.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    
+                    int personXGroup = (int)jsPersonXGroup.getValue();
+                    int totalPersons = allMembers.size() + totalCouples;
+                    int totalGroups = (int)(totalPersons / personXGroup);
+                    int breaksXLeader = (int)jsBreakXLeader.getValue();
+                    boolean oneCouple = chkOneCouple.isSelected();
+                    Grafo newGrafo = createGraph(allMembers);
+                    int maxCouples = oneCouple ? totalCouples : 0;
+                    //if (chkOneCouple.isSelected()) {
+                        ArrayList<Group> newSetGroups = new ArrayList();
+                        for (int i = 0; i < totalGroups; i++) {
+                            newSetGroups.add(new Group());
+                            Group actualGroup = newSetGroups.get(i);
+                            Member actualMember = allMembers.get(0);
+                            if (oneCouple && actualMember.isCouple()) {
+                                actualGroup.addMember(actualMember,newGrafo);
+//                              if (actualMember.getBreakForLeader() == 0) {
+                                actualMember.setBreakForLeader(breaksXLeader);
+//                                    actualGroup.setLeader(actualMember.getName());
+//                                }
+                                allMembers.remove(0);
+                                maxCouples--;
+                            }
+                            while ((actualMember.isCouple() ? actualGroup.getCantMembers() + 1 : actualGroup.getCantMembers()) < personXGroup && !allMembers.isEmpty()) {
+                                int rand = (int)(Math.random() * (allMembers.size() - maxCouples) + maxCouples - 1);
+                                actualMember = allMembers.get(rand);
+                                if (actualGroup.getCantMembers() == personXGroup - 1) {
+                                    while (actualMember.getBreakForLeader() > 0) {
+                                        rand = (int)(Math.random() * (allMembers.size() - maxCouples) + maxCouples - 1);
+                                        actualMember = allMembers.get(rand);
+                                    }
+                                }
+                                actualMember.setBreakForLeader(breaksXLeader);
+                                actualGroup.addMember(actualMember,newGrafo);
+                                allMembers.remove(rand);
+                            }   
+                        }
+                        int groupIndex = 0;
+                        for (int j = 0; j < allMembers.size(); j++) {
+//                            Member actualMember = allMembers.get(0);
+                            if (newSetGroups.get(groupIndex).getCantMembers() > personXGroup) {
+                                groupIndex++;
+                                continue;
+                            }
+                            
+                            
+                                allMembers.get(j).setBreakForLeader(breaksXLeader);
+                            newSetGroups.get(groupIndex).addMember(allMembers.get(j),newGrafo);
+                            groupIndex++;
+                        }
+                        allGroups.add(newSetGroups);
+                        saveGroups(allGroups);
+                        for (Group allGroup : newSetGroups) {
+                            System.out.println(allGroup.toString());                        
+                        }
+                        
+                    //}
+                    jbSetting.setVisible(false);
+                    
+                }
+            });
+        }
+>>>>>>> c6463038141c2f489e252d3264fbe6fd8503bcb5
     }//GEN-LAST:event_jmfileActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -249,9 +337,10 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         this.jbSetting.setLocationRelativeTo(this);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    private void JMgraphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMgraphActionPerformed
+        Grafo newGraph = readGraph();
+        newGraph.display();
+    }//GEN-LAST:event_JMgraphActionPerformed
 
     private void mnsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnsalirActionPerformed
       
@@ -477,6 +566,33 @@ public class pantallaPrincipal extends javax.swing.JFrame {
        return newGraph;
         
     }
+    public boolean saveGraph(Grafo saveThis){
+        
+        try {
+            FileOutputStream fileOut=new FileOutputStream("Graph.obj");
+            ObjectOutputStream salida=new ObjectOutputStream(fileOut);
+            salida.writeObject(saveThis);
+            salida.close();
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return false;
+        }   
+    }
+    
+   public Grafo readGraph() {
+        Grafo completeGraph = new Grafo("Amistad");
+        try {
+            FileInputStream fileIn=new FileInputStream("Graph.obj");
+            ObjectInputStream entrada=new ObjectInputStream(fileIn);
+            completeGraph = (Grafo)(entrada.readObject());
+            
+        } catch (Exception e) {
+            System.out.println("ERROR LEER ARCHIVO");
+            System.out.println(e.toString());
+        }
+        return completeGraph;
+    } 
     /**
      * @param args the command line arguments
      */
@@ -513,6 +629,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem JMgraph;
     private javax.swing.JButton btnaceptar;
     private javax.swing.JCheckBox chkOneCouple;
     private javax.swing.JButton jButton1;
