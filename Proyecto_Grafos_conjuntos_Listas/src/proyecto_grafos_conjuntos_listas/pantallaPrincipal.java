@@ -175,55 +175,63 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jmfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmfileActionPerformed
+        
+        ArrayList allGroups = readGroups();
         FileNameExtensionFilter filter = new  FileNameExtensionFilter("txt","txt");
         JFileChooser FSArchivo = new JFileChooser();
         FSArchivo.setFileFilter(filter);
-        int opcion = FSArchivo.showDialog(FSArchivo, "aceptar");
+        int opcion = FSArchivo.showDialog(FSArchivo, "Aceptar");
+        if (opcion == JFileChooser.CANCEL_OPTION) {
+            return;
+        }
         String nombreArchivo = FSArchivo.getSelectedFile().toString();
         File archivoConfig = new File(nombreArchivo);
-        Scanner sc = null;
-        ArrayList<Member> allMembers = new ArrayList();
-        int contCouples = 0;
-        try{
-            sc = new Scanner( archivoConfig );
-            while( sc.hasNext() ){
-                String actual = sc.nextLine();
-                if (actual.contains(",")) {
-                    allMembers.add(0, new Member(actual, true));
-                    contCouples++;
-                } else {
-                    allMembers.add(new Member(actual, false));
-                }
-            }
-        } catch(Exception e) {}
-        final int totalCouples = contCouples;
+        
+        //Get data from file
+        Object[] data = readMembers(archivoConfig);
+        ArrayList<Member> allMembers = (ArrayList<Member>)data[0];
+        final int totalCouples = (int)data[1];
         if(allMembers.size()>0){
             this.jbSetting.pack();
             this.jbSetting.setLocationRelativeTo(this);
             this.jbSetting.setVisible(true);
+            /**
+             * Inyeccion del evento click del boton aceptar del dialogo settings
+             */
             this.btnaceptar.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     
                     int personXGroup = (int)jsPersonXGroup.getValue();
                     int totalPersons = allMembers.size() + totalCouples;
                     int totalGroups = (int)(totalPersons / personXGroup);
+                    int breaksXLeader = (int)jsBreakXLeader.getValue();
                     boolean oneCouple = chkOneCouple.isSelected();
                     int maxCouples = oneCouple ? totalCouples : 0;
                     //if (chkOneCouple.isSelected()) {
-                        ArrayList<Group> allGroups = new ArrayList(); 
+                        ArrayList<Group> newSetGroups = new ArrayList();
                         for (int i = 0; i < totalGroups; i++) {
-                            allGroups.add(new Group());
-                            Group actualGroup = allGroups.get(i);
+                            newSetGroups.add(new Group());
+                            Group actualGroup = newSetGroups.get(i);
                             Member actualMember = allMembers.get(0);
                             if (oneCouple && actualMember.isCouple()) {
                                 actualGroup.addMember(actualMember);
+//                              if (actualMember.getBreakForLeader() == 0) {
+                                actualMember.setBreakForLeader(breaksXLeader);
+//                                    actualGroup.setLeader(actualMember.getName());
+//                                }
                                 allMembers.remove(0);
                                 maxCouples--;
                             }
                             while ((actualMember.isCouple() ? actualGroup.getCantMembers() + 1 : actualGroup.getCantMembers()) < personXGroup && !allMembers.isEmpty()) {
                                 int rand = (int)(Math.random() * (allMembers.size() - maxCouples) + maxCouples - 1);
-                                System.out.println(allMembers.size() + " === "+ rand);
                                 actualMember = allMembers.get(rand);
+                                if (actualGroup.getCantMembers() == personXGroup - 1) {
+                                    while (actualMember.getBreakForLeader() > 0) {
+                                        rand = (int)(Math.random() * (allMembers.size() - maxCouples) + maxCouples - 1);
+                                        actualMember = allMembers.get(rand);
+                                    }
+                                }
+                                actualMember.setBreakForLeader(breaksXLeader);
                                 actualGroup.addMember(actualMember);
                                 allMembers.remove(rand);
                             }   
@@ -231,17 +239,19 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                         int groupIndex = 0;
                         for (int j = 0; j < allMembers.size(); j++) {
 //                            Member actualMember = allMembers.get(0);
-                            if (allGroups.get(groupIndex).getCantMembers() > personXGroup) {
+                            if (newSetGroups.get(groupIndex).getCantMembers() > personXGroup) {
                                 groupIndex++;
                                 continue;
                             }
                             
-                          
-                            allGroups.get(groupIndex).addMember(allMembers.get(j));
+                            
+                                allMembers.get(j).setBreakForLeader(breaksXLeader);
+                            newSetGroups.get(groupIndex).addMember(allMembers.get(j));
                             groupIndex++;
                         }
+                        allGroups.add(newSetGroups);
                         saveGroups(allGroups);
-                        for (Group allGroup : allGroups) {
+                        for (Group allGroup : newSetGroups) {
                             System.out.println(allGroup.toString());                        
                         }
                         
@@ -272,7 +282,12 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void btnaceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaceptarActionPerformed
 
     }//GEN-LAST:event_btnaceptarActionPerformed
-    public boolean saveGroups(ArrayList<Group> allGroups) {
+    /**
+     * 
+     * @param allGroups Arreglo de arreglos de grupos
+     * @return boolean, retorna true si el archivo fue cargado correctamente de lo contrario false.
+     */
+    public boolean saveGroups(ArrayList allGroups) {
         try {
             FileOutputStream fileOut=new FileOutputStream("groups.obj");
             ObjectOutputStream salida=new ObjectOutputStream(fileOut);
@@ -284,19 +299,46 @@ public class pantallaPrincipal extends javax.swing.JFrame {
             return false;
         }
     }
-    public ArrayList<Group> readGroups() {
-        ArrayList<Group> allGroups = null;
+    
+    /**
+     * Leer del archivo groups.obj, un arreglo que contiene arreglos de grupos.
+     */
+    public ArrayList readGroups() {
+        ArrayList allGroups = new ArrayList();
         try {
             FileInputStream fileIn=new FileInputStream("groups.obj");
             ObjectInputStream entrada=new ObjectInputStream(fileIn);
-            allGroups = (ArrayList<Group>)(entrada.readObject());
-            for (Group group : allGroups) {
-                System.out.println(group.toString());
+            allGroups = (ArrayList)(entrada.readObject());
+            for (Object group : allGroups) {
+                ArrayList<Group> newGroup = (ArrayList<Group>)group;
+                for (Object group1 : newGroup) {
+                    System.out.println(group1.toString());                
+                }
             }
         } catch (Exception e) {
+            System.out.println("ERROR LEER ARCHIVO");
             System.out.println(e.toString());
         }
         return allGroups;
+    }
+    
+    public Object[] readMembers(File inFile) {
+        Scanner sc = null;
+        ArrayList<Member> allMembers = new ArrayList<Member>();
+        int contCouples = 0;
+        try{
+            sc = new Scanner( inFile );
+            while( sc.hasNext() ){
+                String actual = sc.nextLine();
+                if (actual.contains(",")) {
+                    allMembers.add(0, new Member(actual, true));
+                    contCouples++;
+                } else {
+                    allMembers.add(new Member(actual, false));
+                }
+            }
+        } catch(Exception e) {}
+        return new Object[]{allMembers, contCouples};
     }
     /**
      * @param args the command line arguments

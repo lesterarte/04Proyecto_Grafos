@@ -8,7 +8,7 @@ public class Group implements Serializable{
 
     private int cantCouples = 0;
     private TDA_Set Members;
-    private Member Leader;
+    private String Leader;
     
     public Group(int cantCouples, TDA_Set Members) {
         this.cantCouples = cantCouples;
@@ -20,10 +20,10 @@ public class Group implements Serializable{
     }
 
     public Member getLeader() {
-        return Leader;
+        return (Member)Members.get(Leader);
     }
 
-    public void setLeader(Member Leader) {
+    public void setLeader(String Leader) {
         this.Leader = Leader;
     }
     
@@ -52,6 +52,9 @@ public class Group implements Serializable{
     }
     
     public void addMember(Member newMember){
+        if (Leader == null && newMember.getBreakForLeader() == 0) {
+            Leader = newMember.getName();
+        }
         this.Members.put(newMember.getName(), newMember);
         if (newMember.isCouple()) {
             this.cantCouples++;

@@ -18,7 +18,7 @@ public class Grafo extends SingleGraph implements Serializable {
         super(id);
     }
     
-    public void addNode(Member newMember) {
+        public void addNode(Member newMember) {
         allMembers.put(newMember.getName(), newMember);
         this.addNode(newMember.getName());
     }

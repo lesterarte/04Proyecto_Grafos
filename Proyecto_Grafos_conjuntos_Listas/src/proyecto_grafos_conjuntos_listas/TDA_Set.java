@@ -43,8 +43,8 @@ public class TDA_Set  implements Serializable {
     }
     public String toString() {
         String text = "";
-        for (String key : keys) {
-            text += key + ", ";
+        for (Object value : values) {
+            text += value.toString() + ", ";
         }
         return text;
     }

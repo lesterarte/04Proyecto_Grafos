@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class Member  implements Serializable {
     private String name;
-    boolean couple = false;
-    int breakForLeader = 0;
+    private boolean couple = false;
+    private int breakForLeader = 0;
 
     public Member(String name) {
         this.name = name;
@@ -38,7 +38,11 @@ public class Member  implements Serializable {
     public void setBreakForLeader(int breakForLeader) {
         this.breakForLeader = breakForLeader;
     }
+
+    @Override
     public String toString() {
-        return "Name: " + this.name + " isCouple: " + this.couple;
+        return name + "(" + breakForLeader + ')';
     }
+    
+    
 }
