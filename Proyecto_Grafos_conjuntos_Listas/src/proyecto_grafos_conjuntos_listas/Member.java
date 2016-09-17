@@ -1,8 +1,11 @@
 package proyecto_grafos_conjuntos_listas;
-public class Member {
+
+import java.io.Serializable;
+
+public class Member  implements Serializable {
     private String name;
     boolean couple = false;
-    int breakForLeader;
+    int breakForLeader = 0;
 
     public Member(String name) {
         this.name = name;

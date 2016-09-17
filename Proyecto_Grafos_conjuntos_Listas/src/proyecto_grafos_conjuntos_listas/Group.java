@@ -1,8 +1,10 @@
 
 package proyecto_grafos_conjuntos_listas;
 
+import java.io.Serializable;
 
-public class Group {
+
+public class Group implements Serializable{
 
     private int cantCouples = 0;
     private TDA_Set Members;

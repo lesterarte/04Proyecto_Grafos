@@ -6,8 +6,11 @@
 package proyecto_grafos_conjuntos_listas;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -204,8 +207,8 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                     int personXGroup = (int)jsPersonXGroup.getValue();
                     int totalPersons = allMembers.size() + totalCouples;
                     int totalGroups = (int)(totalPersons / personXGroup);
-                    int maxCouples = totalCouples;
                     boolean oneCouple = chkOneCouple.isSelected();
+                    int maxCouples = oneCouple ? totalCouples : 0;
                     //if (chkOneCouple.isSelected()) {
                         ArrayList<Group> allGroups = new ArrayList(); 
                         for (int i = 0; i < totalGroups; i++) {
@@ -217,7 +220,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                                 allMembers.remove(0);
                                 maxCouples--;
                             }
-                            while (actualGroup.getCantMembers() < personXGroup && !allMembers.isEmpty()) {
+                            while ((actualMember.isCouple() ? actualGroup.getCantMembers() + 1 : actualGroup.getCantMembers()) < personXGroup && !allMembers.isEmpty()) {
                                 int rand = (int)(Math.random() * (allMembers.size() - maxCouples) + maxCouples - 1);
                                 System.out.println(allMembers.size() + " === "+ rand);
                                 actualMember = allMembers.get(rand);
@@ -225,12 +228,20 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                                 allMembers.remove(rand);
                             }   
                         }
+                        int groupIndex = 0;
                         for (int j = 0; j < allMembers.size(); j++) {
-                            allGroups.get(j).addMember(allMembers.get(j));
-                        }
-                        
-                        for (Group allGroup : allGroups) {
+//                            Member actualMember = allMembers.get(0);
+                            if (allGroups.get(groupIndex).getCantMembers() > personXGroup) {
+                                groupIndex++;
+                                continue;
+                            }
                             
+                          
+                            allGroups.get(groupIndex).addMember(allMembers.get(j));
+                            groupIndex++;
+                        }
+                        saveGroups(allGroups);
+                        for (Group allGroup : allGroups) {
                             System.out.println(allGroup.toString());                        
                         }
                         
@@ -261,7 +272,32 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void btnaceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnaceptarActionPerformed
 
     }//GEN-LAST:event_btnaceptarActionPerformed
-
+    public boolean saveGroups(ArrayList<Group> allGroups) {
+        try {
+            FileOutputStream fileOut=new FileOutputStream("groups.obj");
+            ObjectOutputStream salida=new ObjectOutputStream(fileOut);
+            salida.writeObject(allGroups);
+            salida.close();
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return false;
+        }
+    }
+    public ArrayList<Group> readGroups() {
+        ArrayList<Group> allGroups = null;
+        try {
+            FileInputStream fileIn=new FileInputStream("groups.obj");
+            ObjectInputStream entrada=new ObjectInputStream(fileIn);
+            allGroups = (ArrayList<Group>)(entrada.readObject());
+            for (Group group : allGroups) {
+                System.out.println(group.toString());
+            }
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return allGroups;
+    }
     /**
      * @param args the command line arguments
      */

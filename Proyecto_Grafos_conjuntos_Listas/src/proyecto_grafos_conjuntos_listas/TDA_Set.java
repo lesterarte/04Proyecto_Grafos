@@ -1,8 +1,9 @@
 package proyecto_grafos_conjuntos_listas;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class TDA_Set {
+public class TDA_Set  implements Serializable {
     private ArrayList<String> keys = new ArrayList<String>();
     private ArrayList<Object> values = new ArrayList<Object>();
 
