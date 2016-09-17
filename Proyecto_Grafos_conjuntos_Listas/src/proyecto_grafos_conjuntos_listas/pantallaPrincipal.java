@@ -53,7 +53,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jmfile = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        JMgraph = new javax.swing.JMenuItem();
         mnsalir = new javax.swing.JMenu();
 
         jLabel2.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
@@ -144,13 +144,13 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuItem2);
 
-        jMenuItem3.setText("Show graph");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        JMgraph.setText("Show graph");
+        JMgraph.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                JMgraphActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem3);
+        jMenu1.add(JMgraph);
 
         jMenuBar1.add(jMenu1);
 
@@ -272,9 +272,10 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                 
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    private void JMgraphActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMgraphActionPerformed
+        Grafo newGraph = readGraph();
+        newGraph.display();
+    }//GEN-LAST:event_JMgraphActionPerformed
 
     private void mnsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnsalirActionPerformed
       
@@ -369,6 +370,33 @@ public class pantallaPrincipal extends javax.swing.JFrame {
        return newGraph;
         
     }
+    public boolean saveGraph(Grafo saveThis){
+        
+        try {
+            FileOutputStream fileOut=new FileOutputStream("Graph.obj");
+            ObjectOutputStream salida=new ObjectOutputStream(fileOut);
+            salida.writeObject(saveThis);
+            salida.close();
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return false;
+        }   
+    }
+    
+   public Grafo readGraph() {
+        Grafo completeGraph = new Grafo("Amistad");
+        try {
+            FileInputStream fileIn=new FileInputStream("Graph.obj");
+            ObjectInputStream entrada=new ObjectInputStream(fileIn);
+            completeGraph = (Grafo)(entrada.readObject());
+            
+        } catch (Exception e) {
+            System.out.println("ERROR LEER ARCHIVO");
+            System.out.println(e.toString());
+        }
+        return completeGraph;
+    } 
     /**
      * @param args the command line arguments
      */
@@ -405,6 +433,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem JMgraph;
     private javax.swing.JButton btnaceptar;
     private javax.swing.JCheckBox chkOneCouple;
     private javax.swing.JLabel jLabel1;
@@ -413,7 +442,6 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JDialog jbSetting;
     private javax.swing.JMenuItem jmfile;
     private javax.swing.JSpinner jsBreakXLeader;
