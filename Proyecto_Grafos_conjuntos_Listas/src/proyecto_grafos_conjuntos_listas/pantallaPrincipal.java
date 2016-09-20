@@ -63,7 +63,6 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
         JMgraph = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
-        mnsalir = new javax.swing.JMenu();
 
         jLabel2.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLabel2.setText("PERSON X GRUPO ");
@@ -210,14 +209,6 @@ public class pantallaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        mnsalir.setText("Exit");
-        mnsalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnsalirActionPerformed(evt);
-            }
-        });
-        jMenuBar1.add(mnsalir);
-
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -327,11 +318,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         Viewer viewer = newGraph.display();
         viewer.setCloseFramePolicy(Viewer.CloseFramePolicy.HIDE_ONLY);
     }//GEN-LAST:event_JMgraphActionPerformed
-    
-    private void mnsalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnsalirActionPerformed
         
-    }//GEN-LAST:event_mnsalirActionPerformed
-    
     private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenu1ActionPerformed
@@ -343,9 +330,9 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        this.jdSetGroups.pack();
-        this.jdSetGroups.setVisible(true);
-        this.jdSetGroups.setLocationRelativeTo(this);
+        
+        viewGroups screenGroup = new viewGroups(this.readGroups());
+        screenGroup.show();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
     /**
      *
@@ -421,23 +408,6 @@ System.out.println(group1.toString());
         return new Object[]{allMembers, contCouples};
     }
     
-    public void showGroup(ArrayList allGroups, int posGroup) {
-        viewGroups screenGroup = new viewGroups(allGroups);
-//        jpAllGroups.removeAll();
-//        ArrayList<Group> actualSet = (ArrayList<Group>)allGroups.get(posGroup);
-//        for (Group group : actualSet) {
-//            int pos = actualSet.indexOf(group);
-//            groupPanel viewGroup = new groupPanel(group, pos + 1);
-//            viewGroup.setBounds(pos * 200, 0, 200, 150);
-//            viewGroup.setVisible(true);
-//            jpAllGroups.add(viewGroup);
-//            jpAllGroups.repaint();
-//            jpAllGroups.validate();
-//            jdSetGroups.repaint();
-//            jdSetGroups.validate();
-//        }
-
-    }
     /**
      * Este método enlaza los eventos de los componentes del GUI
      * @param allGroups
@@ -452,12 +422,6 @@ System.out.println(group1.toString());
 //                    ArrayList<Group> actualSet = object;
 //                }
             }
-        });
-        this.btnSiguiente.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                showGroup(allGroups,posGroup + 1);
-            };
-            
         });
         
         //Menu
@@ -497,20 +461,20 @@ System.out.println(group1.toString());
         newGraph.addAttribute("ui.antialias");
 //        System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 //        newGraph.addAttribute("ui.stylehseet", "url('http://somewere/in/the/clouds/stylesheet')");
-newGraph.addAttribute("ui.style", "padding: 45px;");
-for (int i = 0; i < allMembers.size(); i++) {
-    newGraph.addNode(allMembers.get(i));
-}
+        newGraph.addAttribute("ui.style", "padding: 45px;");
+        for (int i = 0; i < allMembers.size(); i++) {
+            newGraph.addNode(allMembers.get(i));
+        }
 
-//labels nodes
-for(Node n:newGraph){
-    n.addAttribute("ui.label",n.getId());
-    n.addAttribute("ui.style", "text-alignment: at-right; text-padding:"
-            + " 4px, 3px; text-background-mode: rounded-box; "
-            + "text-background-color: #A7CC; text-color: white; "
-            + "text-style: bold-italic; text-color: #FFF;");
-}
-return newGraph;
+        //labels nodes
+        for(Node n:newGraph){
+            n.addAttribute("ui.label",n.getId());
+            n.addAttribute("ui.style", "text-alignment: at-right; text-padding:"
+                    + " 4px, 3px; text-background-mode: rounded-box; "
+                    + "text-background-color: #A7CC; text-color: white; "
+                    + "text-style: bold-italic; text-color: #FFF;");
+        }
+        return newGraph;
 
     }
     public boolean saveGraph(ArrayList<Group> saveThis){
@@ -566,26 +530,26 @@ return newGraph;
         completeGraph.addAttribute("ui.antialias");
 //        System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 //        completeGraph.addAttribute("ui.stylehseet", "url('http://somewere/in/the/clouds/stylesheet')");
-completeGraph.addAttribute("ui.style", "padding: 45px;");
-try {
-    FileInputStream fileIn=new FileInputStream("Graph.obj");
-    ObjectInputStream entrada=new ObjectInputStream(fileIn);
-    TDA_Set allMembers = (TDA_Set)(entrada.readObject());
-    completeGraph.setAllMembers(allMembers);
-    for(Node n:completeGraph){
-        System.out.println(n.getId());
-        n.addAttribute("ui.label",n.getId());
-        n.addAttribute("ui.style", "text-alignment: at-right; text-padding:"
-                + " 4px, 3px; text-background-mode: rounded-box; "
-                + "text-background-color: #A7CC; text-color: red; "
-                + "text-style: bold-italic;");
-    }
-    entrada.close();
-} catch (Exception e) {
-    System.out.println("ERROR LEER ARCHIVO GRAFO graph.obj readGraph");
-    System.out.println(e.toString());
-}
-return completeGraph;
+        completeGraph.addAttribute("ui.style", "padding: 45px;");
+        try {
+            FileInputStream fileIn=new FileInputStream("Graph.obj");
+            ObjectInputStream entrada=new ObjectInputStream(fileIn);
+            TDA_Set allMembers = (TDA_Set)(entrada.readObject());
+            completeGraph.setAllMembers(allMembers);
+            for(Node n:completeGraph){
+                System.out.println(n.getId());
+                n.addAttribute("ui.label",n.getId());
+                n.addAttribute("ui.style", "text-alignment: at-right; text-padding:"
+                        + " 4px, 3px; text-background-mode: rounded-box; "
+                        + "text-background-color: #A7CC; text-color: red; "
+                        + "text-style: bold-italic;");
+            }
+            entrada.close();
+        } catch (Exception e) {
+            System.out.println("ERROR LEER ARCHIVO GRAFO graph.obj readGraph");
+            System.out.println(e.toString());
+        }
+        return completeGraph;
     }
     /**
      * @param args the command line arguments
@@ -642,6 +606,5 @@ return completeGraph;
     private javax.swing.JPanel jpAllGroups;
     private javax.swing.JSpinner jsBreakXLeader;
     private javax.swing.JSpinner jsPersonXGroup;
-    private javax.swing.JMenu mnsalir;
     // End of variables declaration//GEN-END:variables
 }
