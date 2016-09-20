@@ -147,7 +147,7 @@
                 <Property name="verticalTextPosition" type="int" value="3"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton2">
+            <Component class="javax.swing.JButton" name="btnSiguiente">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Siguiente"/>
                 <Property name="focusable" type="boolean" value="false"/>

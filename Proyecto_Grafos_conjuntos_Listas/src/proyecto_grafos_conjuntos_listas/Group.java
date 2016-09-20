@@ -53,16 +53,16 @@ public class Group implements Serializable{
     
     public void addMember(Member newMember, Grafo friendlyGraph, int breakXLeader){
         if (Leader == null && newMember.getBreakForLeader() == 0) {
-            newMember.setBreakForLeader(breakXLeader);
+            newMember.setBreakForLeader(breakXLeader + 1);
             Leader = newMember.getName();
         } else {
             if (Leader != null && newMember.getName() != null) {
                 System.out.println(friendlyGraph.getEdge(newMember.getName() + "->" + Leader) + "EDGE");
                 if (friendlyGraph.getEdge(newMember.getName() + "->" + Leader) == null) {
-                    friendlyGraph.addEdge(newMember.getName() + "->" + Leader, newMember.getName(), Leader);
+                    friendlyGraph.addEdge(newMember.getName() + "->" + Leader, newMember.getName(), Leader, true);
                 }
+                newMember.setVisitedHouses(Leader);
             }
-            newMember.setVisitedHouses(Leader);
         }
         this.Members.put(newMember.getName(), newMember);
         if (newMember.isCouple()) {
@@ -70,6 +70,10 @@ public class Group implements Serializable{
         }
         if (newMember.getBreakForLeader() > 0) {
             newMember.setBreakForLeader(newMember.getBreakForLeader() - 1);
+        }
+        if (Leader == null && newMember.getBreakForLeader() == 0) {
+            newMember.setBreakForLeader(breakXLeader + 1);
+            Leader = newMember.getName();
         }
     }
     

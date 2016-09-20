@@ -24,7 +24,8 @@ public class groupPanel extends javax.swing.JPanel {
         DefaultListModel modelo = (DefaultListModel)this.lstUsers.getModel();
         for (Object member : group.getMembers().getValues()) {
             Member temp = (Member)member;
-            modelo.addElement(temp.getName() + (group.getLeader().getName().equals(temp.getName()) ? "(Leader)" : ""));
+            if (temp != null)
+                modelo.addElement(temp.getName() + (group.getLeader().getName().equals(temp.getName()) ? "(Leader)" : ""));
         }
     }
     public groupPanel() {
