@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package proyecto_grafos_conjuntos_listas;
 
 import java.io.Serializable;
@@ -23,7 +23,7 @@ public class Grafo extends SingleGraph implements Serializable {
         allMembers.put(newMember.getName(), newMember);
         this.addNode(newMember.getName());
     }
-
+    
     public void setAllMembers(TDA_Set allMembers) {
         ArrayList members = allMembers.getValues();
         for (Object member : members) {
@@ -40,7 +40,7 @@ public class Grafo extends SingleGraph implements Serializable {
         }
 //        this.allMembers = allMembers;
     }
-
+    
     public TDA_Set getAllMembers() {
         return allMembers;
     }

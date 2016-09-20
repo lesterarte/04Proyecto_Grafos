@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package proyecto_grafos_conjuntos_listas;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class viewGroups extends javax.swing.JFrame {
         }
         
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -120,7 +120,7 @@ public class viewGroups extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void btnSiguienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSiguienteMouseClicked
         if (posActual >= this.allGroups.size() - 1) {
             return;
@@ -133,7 +133,7 @@ public class viewGroups extends javax.swing.JFrame {
         this.btnAnterior.setEnabled(true);
         showGroup();
     }//GEN-LAST:event_btnSiguienteMouseClicked
-
+    
     private void btnAnteriorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAnteriorMouseClicked
         // TODO add your handling code here:
         if (posActual == 0) {
@@ -147,7 +147,7 @@ public class viewGroups extends javax.swing.JFrame {
         this.btnSiguiente.setEnabled(true);
         showGroup();
     }//GEN-LAST:event_btnAnteriorMouseClicked
-
+    
     /**
      * @param args the command line arguments
      */
@@ -155,8 +155,8 @@ public class viewGroups extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+        * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+        */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -174,7 +174,7 @@ public class viewGroups extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(viewGroups.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -182,7 +182,7 @@ public class viewGroups extends javax.swing.JFrame {
             }
         });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnterior;
     private javax.swing.JButton btnSiguiente;

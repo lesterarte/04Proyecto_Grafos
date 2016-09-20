@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 
 public class Group implements Serializable{
-
+    
     private int cantCouples = 0;
     private TDA_Set Members;
     private String Leader;
@@ -14,15 +14,15 @@ public class Group implements Serializable{
         this.cantCouples = cantCouples;
         this.Members = Members;
     }
-
+    
     public Group() {
         Members = new TDA_Set();
     }
-
+    
     public Member getLeader() {
         return (Member)Members.get(Leader);
     }
-
+    
     public void setLeader(String Leader) {
         this.Leader = Leader;
     }
@@ -30,22 +30,22 @@ public class Group implements Serializable{
     public int getCantCouples() {
         return cantCouples;
     }
-
+    
     public void setCantCouples(int cantCouples) {
         this.cantCouples = cantCouples;
     }
-
+    
     public TDA_Set getMembers() {
         return Members;
     }
-
+    
     public void setMembers(TDA_Set Members) {
         this.Members = Members;
     }
     
     public boolean hasCouple(){
-        return cantCouples > 0;    
-    }  
+        return cantCouples > 0;
+    }
     
     public int getCantMembers(){
         return this.Members.getCountKies() + this.cantCouples;
@@ -77,7 +77,7 @@ public class Group implements Serializable{
         }
     }
     
-
+    
     @Override
     public String toString() {
         return "Group{" + "cantCouples=" + cantCouples + ", Members=" + Members.toString() + ", Leader=" + Leader + '}';

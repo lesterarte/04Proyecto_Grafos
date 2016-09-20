@@ -8,7 +8,7 @@ public class Member  implements Serializable {
     private String name;
     private boolean couple = false;
     private int breakForLeader = 0;
-
+    
     public Member(String name) {
         this.name = name;
     }
@@ -16,7 +16,7 @@ public class Member  implements Serializable {
         this.name = name;
         this.couple = isCouple;
     }
-
+    
     public Member(String name, int breakForLeader) {
         this.name = name;
         this.breakForLeader = breakForLeader;
@@ -24,33 +24,33 @@ public class Member  implements Serializable {
     public boolean isCouple() {
         return this.couple;
     }
-
+    
     public String getName() {
         return name;
     }
-
+    
     public void setName(String name) {
         this.name = name;
     }
-
+    
     public int getBreakForLeader() {
         return breakForLeader;
     }
-
+    
     public void setBreakForLeader(int breakForLeader) {
         this.breakForLeader = breakForLeader;
     }
-
+    
     public void setVisitedHouses(String noVisitedHouse){
         this.visitedHouses.put(noVisitedHouse, noVisitedHouse);
     }
-
+    
     public TDA_Set getVisitedHouses() {
         return visitedHouses;
     }
     
     
-
+    
     @Override
     public String toString() {
         return name + "(" + breakForLeader + ')' + this.visitedHouses.getKeys().toString();

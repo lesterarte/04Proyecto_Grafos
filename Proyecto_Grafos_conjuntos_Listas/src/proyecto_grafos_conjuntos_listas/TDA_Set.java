@@ -6,11 +6,11 @@ import java.util.ArrayList;
 public class TDA_Set  implements Serializable {
     private ArrayList<String> keys = new ArrayList<String>();
     private ArrayList<Object> values = new ArrayList<Object>();
-
+    
     public TDA_Set() {
     }
     public void put(String key, Object value) {
-        int tempIndex = keys.indexOf(key); 
+        int tempIndex = keys.indexOf(key);
         if (tempIndex == -1) {
             keys.add(key);
             values.add(value);
@@ -22,14 +22,14 @@ public class TDA_Set  implements Serializable {
         return keys.indexOf(key) != -1;
     }
     public Object get(String key) {
-        int tempIndex = keys.indexOf(key); 
+        int tempIndex = keys.indexOf(key);
         if (tempIndex != -1) {
             return values.get(tempIndex);
         }
         return null;
     }
     public Object remove(String key) {
-        int tempIndex = keys.indexOf(key); 
+        int tempIndex = keys.indexOf(key);
         if (tempIndex != -1) {
             Object temp = values.get(tempIndex);
             keys.remove(tempIndex);
@@ -48,15 +48,15 @@ public class TDA_Set  implements Serializable {
         }
         return text;
     }
-
+    
     public ArrayList<Object> getValues() {
         return values;
     }
-
+    
     public void setValues(ArrayList<Object> values) {
         this.values = values;
     }
-
+    
     public ArrayList<String> getKeys() {
         return keys;
     }
